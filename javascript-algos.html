@@ -6,7 +6,7 @@
     </button>
 </h3>
 <div>
-    <!-- ALREADY ADDED AN ATTRIBUTE THAT focuses the CURSOR INTO THE TEXTAREA ELEMENT WHEN THE PAGE LOADS -->
+    <!-- DONE: ADDED AN ATTRIBUTE THAT focuses the CURSOR INTO THE TEXTAREA ELEMENT WHEN THE PAGE LOADS -->
     <textarea 
         autofocus
         rows=6 
@@ -59,7 +59,7 @@
     }
 
     function clearMessages() {
-        /* CLEARS MESSAGES FROM DOCUMENT WHEN USER CLICKS THE [CLEAR MESSAGES] BUTTON */
+        /* DONE: CLEARS MESSAGES FROM DOCUMENT WHEN USER CLICKS THE [CLEAR MESSAGES] BUTTON */
         /* TODO EXTRA CREDIT INCLUDE A SCRIPT TAG THATS FETCHES BOOTSTRAP CSS STLYINGS AND STYLE THE BUTTONS */
         var messagesContainer = document.getElementById('messagesContainer');
         if (messagesContainer) {
@@ -87,7 +87,7 @@
         handleSpan.style['color'] = 'dodgerblue';
         handleText = document.createTextNode(handle);
         handleSpan.appendChild(handleText);
-        // EXCLUDING THE ORIGINALLY TYPED USER NAME REPLACE THIS TEXT \
+        // DONE: EXCLUDING THE ORIGINALLY TYPED USER NAME REPLACE THIS TEXT \
         // WITH ANY ADDITIONAL USER TEXT FROM THE ORIGIN USER TEXT MESSAGE
         const userText = getUserText().replace(/^@\w*/, '');
         var messageText = document.createTextNode(`${userText} `);
@@ -99,7 +99,7 @@
         clearUserInput();
     }
     
-    //TODO SET THE FLAG TO FALS ONCE YOU UNDERSTAND THE ASSIGNMENT
+    //DONE SET THE FLAG TO FALS ONCE YOU UNDERSTAND THE ASSIGNMENT
     const instructionsFlag = false;
     if (instructionsFlag) {
         console.log(`README`);
@@ -137,6 +137,41 @@
             firstName: 'Horace',
             lastName: 'Grant',
             handle: '@HGrant'
+        },
+        {
+            firstName: 'Mae',
+            lastName: 'Jemison',
+            handle: '@MJemison'
+        },
+        {
+            firstName: 'Rick',
+            lastName: 'Sanchez',
+            handle: '@RSanchez'
+        },
+        {
+            firstName: 'Stormy',
+            lastName: 'Daniels',
+            handle: '@SDaniels'
+        },
+        {
+            firstName: 'Kendrick',
+            lastName: 'Lamar',
+            handle: '@KLamar'
+        },
+        {
+            firstName: '',
+            lastName: '',
+            handle: '@'
+        },
+        {
+            firstName: '',
+            lastName: '',
+            handle: '@'
+        },
+        {
+            firstName: '',
+            lastName: '',
+            handle: '@'
         }
     ];
 
