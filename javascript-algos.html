@@ -1,4 +1,11 @@
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/2.4.1/lodash.min.js"></script>
+
+<!-- DONE: Imported Boostrap -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+
 <h3>
     Messages App
     <button onclick="clearMessages()">
@@ -8,13 +15,13 @@
 <div>
     <!-- DONE: ADDED AN ATTRIBUTE THAT focuses the CURSOR INTO THE TEXTAREA ELEMENT WHEN THE PAGE LOADS -->
     <textarea 
+        placeholder="enter text here. search names by pressing @ and first 3 letters either name"
         autofocus
         rows=6 
         cols=55 
         id="inputText" 
         type="text"
-        style="margin-bottom: 15px;"> 
-    </textarea>
+        style="margin-bottom: 15px;"></textarea>
     <button onclick="addPlainMessage()">
         Enter
     </button>
@@ -33,12 +40,14 @@
     function initDocument() {
         clearNames();
         initUsersNames();
+        initConstantTimeNameFilter();
         initMessages();
     }
 
     function initUsersNames() {
         var rootDiv = document.createElement('div');
         rootDiv.id = 'listContainer';
+        rootDiv.style['float'] = 'right';
         var userNamesContainer = document.createElement('div');
         userNames.forEach( function(userName, index) {
             var childDiv = document.createElement('div');
@@ -51,16 +60,15 @@
     }
 
     function initMessages() {
-        var rootDiv = document.createElement('div');
         var messagesContainer = document.createElement('div');
         messagesContainer.id = 'messagesContainer';
-        messagesContainer.style['float'] = 'left';
+        //messagesContainer.style['float'] = 'left';
         document.body.appendChild(messagesContainer);
     }
 
     function clearMessages() {
         /* DONE: CLEARS MESSAGES FROM DOCUMENT WHEN USER CLICKS THE [CLEAR MESSAGES] BUTTON */
-        /* TODO EXTRA CREDIT INCLUDE A SCRIPT TAG THATS FETCHES BOOTSTRAP CSS STLYINGS AND STYLE THE BUTTONS */
+        /* DONE: EXTRA CREDIT INCLUDE A SCRIPT TAG THATS FETCHES BOOTSTRAP CSS STLYINGS AND STYLE THE BUTTONS */
         var messagesContainer = document.getElementById('messagesContainer');
         if (messagesContainer) {
             while (messagesContainer.hasChildNodes()) {
@@ -77,6 +85,7 @@
         messageDiv.appendChild(text);
         messagesContainer.appendChild(messageDiv);
         clearUserInput();
+        document.getElementById('inputText').focus();
     }
 
     function addHandleMessage(handle) {
@@ -97,6 +106,7 @@
 
         clearFilteredNames();
         clearUserInput();
+        document.getElementById('inputText').focus();
     }
     
     //DONE SET THE FLAG TO FALS ONCE YOU UNDERSTAND THE ASSIGNMENT
@@ -114,7 +124,7 @@
     }
     
 
-    /* TODO ADD ADDITONALY 
+    /* DONE: ADD ADDITONALY 
        OBJECTS LIKE THE ONES BELOW, MINIMUM OF TEN.  
        EACH MUST CONTAIN A FIRST AND LAST NAME AND HANDLE */
     const userNames = [
@@ -159,21 +169,51 @@
             handle: '@KLamar'
         },
         {
-            firstName: '',
-            lastName: '',
-            handle: '@'
+            firstName: 'Gordon',
+            lastName: 'Ramsey',
+            handle: '@GRamsey'
         },
         {
-            firstName: '',
-            lastName: '',
-            handle: '@'
+            firstName: 'Steve',
+            lastName: 'Jobs',
+            handle: '@SJobs'
         },
         {
-            firstName: '',
-            lastName: '',
-            handle: '@'
+            firstName: 'Cloud',
+            lastName: 'Strife',
+            handle: '@CStrife'
+        },
+        {
+            firstName: 'Steven',
+            lastName: 'Hawking',
+            handle: '@SHawking'
         }
     ];
+
+    /* Basic Hashmap implementation who's map variable holds the first 3 letters 
+        of first names and last names as keys and has an array of matching username objects 
+        as the value of each key since several users can have the same 1st 3 letters.
+    */
+    var userNameHashMap = {
+        map:{},
+
+        putUserName: function (userName)  {
+            var firstNameIndex = userName.firstName.toLowerCase().slice(0,3);
+            var lastNameIndex = userName.lastName.toLowerCase().slice(0,3);
+            if (!this.map[firstNameIndex]){
+                this.map[firstNameIndex] = [];
+            }
+            if (!this.map[lastNameIndex]){
+                this.map[lastNameIndex] = [];
+            }
+            this.map[firstNameIndex].push(userName);
+            this.map[lastNameIndex].push(userName);
+        },
+
+        getUserNames: function(key) {
+            return this.map[key] ? this.map[key] : [];
+        }
+    }
 
     const userMessages = [];
 
@@ -187,18 +227,28 @@
         }
     }
 
-    function initConstantTimeNameFileter() {
-        /* EXTRA CREDIT */
+    function initConstantTimeNameFilter() {
+        /* DONE: EXTRA CREDIT */
+        var filteredNamesContainer = document.createElement('div');
+        filteredNamesContainer.id = 'filteredNamesContainer';
+        document.body.appendChild(filteredNamesContainer);
+
+        userNames.forEach( (userName) => {
+            userNameHashMap.putUserName(userName);
+        });
+
     }
     function constantTimeNameFilter(userText) {
-        /* EXTRA CREDIT :: CONVERT filterNames FUNCTION TO DO CONSTANT TIME LOOK UP.  
+        /* DONE: EXTRA CREDIT :: CONVERT filterNames FUNCTION TO DO CONSTANT TIME LOOK UP.  
         THIS WILL REQUIRE initConstantTimeNameFileter ON PAGE LOAD AS WELL */
+        const firstThreeChars = userText.toLowerCase().slice(1,4);
+        console.log(`First three characters: ${firstThreeChars} `);
+        return userNameHashMap.getUserNames(firstThreeChars);
     }
 
     function filterNames(userText) {
         const firstThreeChars = userText.toLowerCase().slice(1,4);
         var re = new RegExp(firstThreeChars, 'g');
-        console.log(`First three characters: ${firstThreeChars} `);
         console.log(`First three characters: ${firstThreeChars} `);
         const filteredNames = [];
         userNames.forEach( (userName) => {
@@ -215,10 +265,9 @@
     }
 
     function initFilteredNames(filteredNames) {
-        clearNames();
+        //clearNames(); decided not to clear names so that i can see the list of available names at all times
         clearFilteredNames();
-        var rootDiv = document.createElement('div');
-        rootDiv.id = 'filteredNamesContainer';
+        var filteredNamesContainer = document.getElementById('filteredNamesContainer');
         var namesContainer = document.createElement('div');
         filteredNames.forEach( (name) => {
             var nameElm = document.createElement('button');
@@ -234,7 +283,7 @@
             
             namesContainer.appendChild(nameElm);
         });
-        document.body.appendChild(namesContainer);
+        filteredNamesContainer.appendChild(namesContainer);
     }
 
     function clearUserInput() {
@@ -262,19 +311,19 @@
         const firstChar = userText[0] || '';
         if (firstChar === '@') {
             console.log('filter names ...');
-            const filteredNames = filterNames(userText);
+            const filteredNames = constantTimeNameFilter(userText);
             initFilteredNames(filteredNames);
         } else {
             console.log('MISSING @ IN USER TEXT');
         }
     }
-    // UPDATED THE DEBOUNCE DELAY TO MORE CLOSELY RESEMBLE USER TYPING
+    // DONE: UPDATE THE DEBOUNCE DELAY TO MORE CLOSELY RESEMBLE USER TYPING
     document.addEventListener("DOMContentLoaded", function(event) {
         document.getElementById('inputText').addEventListener(
             'input',
             debounce(
                 searchNames,
-                1000
+                200
             )
         );
         initDocument();
@@ -287,5 +336,8 @@
         border-radius: 5px;
         height: 23px;
         line-height: 18px;
+    }
+    body{
+        margin: 8px;
     }
 </style>
